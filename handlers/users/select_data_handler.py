@@ -26,8 +26,8 @@ async def select_back(message: Message, state: FSMContext):
 async def get_status(message: Message):
     region_db.update_status(farqiyo="farqiyo", status=message.text)
     if message.text == "Sotiladi" or message.text == "Ijaraga":
-        await message.answer("Kerakli tumanni tanlang", reply_markup=regions_keyboard)
         await message.answer("Toshkent shaxrining barcha tumanlari", reply_markup=back_button)
+        await message.answer("Kerakli tumanni tanlang", reply_markup=regions_keyboard)
         await UserState.select_region.set()
     else:
         rem = await message.answer("Iltimos bu yerda yozmang ✋\nTurni tanlang️ 👇")
@@ -45,7 +45,7 @@ async def back_button_def(message: Message, state: FSMContext):
 @dp.callback_query_handler(lambda c: True, state=UserState.select_region, user_id=ADMINS)
 async def select_region(call: CallbackQuery):
     region_db.update_region(farqiyo="farqiyo", region=call.data)
-    await call.message.answer("Necha xonali uy qidiryabsiz")
+    await call.message.edit_text("Necha xonali uy qidiryabsiz")
     await UserState.select_rooms.set()
 
 
